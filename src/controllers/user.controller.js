@@ -2,21 +2,14 @@ import bcrypt from "bcrypt";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import userModel from "../models/user.model.js";
 import { ApiError } from "../utils/apiError.js";
-import { checkEmpty, isEmail, isEmpty, isMatch } from "../utils/validate.js";
-import { ApiResponse } from "../utils/apiResponse.js";
 import generateToken from "../utils/generateToken.js";
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, password, confirmPassword, role } = req.body;
-  // checking empty field
-  const isEmpty = checkEmpty(name, email, password, confirmPassword);
-  if (isEmpty) {
-    throw new ApiError(400, "Field must be filled up");
-  }
-  // checking valid email
-  if (!isEmail(email)) {
-    throw new ApiError(400, "Invalid Email Address");
-  }
+  // TODO:checking empty field
+
+  // TODO:checking valid email
+
   // checking user already exists
   const userExists = await userModel.findOne({ email });
   if (userExists) {
@@ -30,12 +23,7 @@ const register = asyncHandler(async (req, res) => {
   const hashpass = await bcrypt.hash(password, 10);
 
   // creating user
-  const user = await userModel.create({
-    name,
-    email,
-    password: hashpass,
-    role,
-  });
+  const user = await userModel.create({});
 
   const createdUser = await userModel.findById(user._id).select("-password");
 
@@ -43,9 +31,7 @@ const register = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while registering user");
   }
 
-  return res
-    .status(201)
-    .json(new ApiResponse(200, createdUser, "User Register Successfully"));
+  return res.status(201).json();
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -92,7 +78,6 @@ const login = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
-
   const options = {
     httpOnly: true,
     secure: true,
@@ -104,7 +89,6 @@ const logout = asyncHandler(async (req, res) => {
     .clearCookie("accessToken", options)
     .json(new ApiResponse(200, {}, "User Logged Out"));
 });
-
 
 const admin = (req, res) => {
   res.status(200).json({

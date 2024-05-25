@@ -1,13 +1,12 @@
-import {Router} from "express";
-import {admin,
-    customer,
-    login,
-    logout,
-    register} from "../controllers/user.controller.js";
-import { 
-    auth, 
-    isAdmin, 
-    isUser } from "../middlewares/auth.middleware.js";
+import { Router } from "express";
+import {
+  admin,
+  customer,
+  login,
+  logout,
+  register,
+} from "../controllers/user.controller.js";
+import { auth, isAdmin, isUser } from "../middlewares/auth.middleware.js";
 
 const userRoute = Router();
 /**
@@ -17,7 +16,7 @@ const userRoute = Router();
  * @params name,email,password,role
  * @access public
  */
-userRoute.post("/login",login);
+userRoute.post("/login", login);
 /**
  * @desc Register User
  * @method POST
@@ -25,35 +24,33 @@ userRoute.post("/login",login);
  * @params name,email,password,role
  * @access public
  */
-userRoute.post("/register",register);
+userRoute.post("/register", register);
 /**
  * @desc Admin Profile
  * @method GET
  * @route http://localhost:{PORT}/api/v1/user/admin
  * @access private
  */
-userRoute.get("/admin",auth,isAdmin,admin);
+userRoute.get("/admin", auth, isAdmin, admin);
 /**
  * @desc User Profile
  * @method GET
  * @route http://localhost:{PORT}/api/v1/user/customer
  * @access private
  */
-userRoute.get("/customer",auth,isUser,customer);
+userRoute.get("/user", auth, isUser, customer);
 /**
  * @desc User Logout
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/logout
  * @access private
  */
-userRoute.post("/logout",auth,logout);
+userRoute.post("/logout", auth, logout);
 /**
  * @desc Token Refresh
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/refresh-token
  * @access private
  */
-
-
 
 export default userRoute;
