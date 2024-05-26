@@ -3,9 +3,55 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import userModel from "../models/user.model.js";
 import { ApiError } from "../utils/apiError.js";
 import generateToken from "../utils/generateToken.js";
+import { generate } from "otp-generator";
+import otpModel from "../models/otp.model.js";
+
+// send OTP 
+const sendOTP = asyncHandler(async(req,res)=>{
+  // data retrive from req.body
+  const {email} = req.body;
+
+  // check if email is already registered
+  const existsEmail = await userModel.findOne({email});
+  if(existsEmail)
+    {
+      throw new ApiError(401,"User already exists");
+    }
+
+    //  generate OTP
+    let otp = generate(6,{
+      upperCaseAlphabets:false,
+      lowerCaseAlphabets:false,
+      specialChars:false,
+    });
+    
+    // check otp is unique
+    let result = await otpModel.findOne({otp:otp});
+    while(result)
+      {
+        otp = generate(6,{
+          upperCaseAlphabets:false,
+          lowerCaseAlphabets:false,
+          specialChars:false,
+        });
+        result = await otpModel.findOne({otp:otp});
+      }
+
+      const otpData = {email,otp};
+      
+      // insert into Database
+      const otpcreated = await otpModel.create(otpData);
+
+      res.status(200).json({
+        success:true,
+        message:"OTP sent successfully",
+        otp,
+      });
+
+});
 
 const register = asyncHandler(async (req, res) => {
-  const { name, email, password, confirmPassword, role } = req.body;
+  const { fullname,username, email, password, confirmPassword,cfhandle,cfrating,image, role,description } = req.body;
   // TODO:checking empty field
 
   // TODO:checking valid email
@@ -90,18 +136,6 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User Logged Out"));
 });
 
-const admin = (req, res) => {
-  res.status(200).json({
-    message: "Admin Dashboard",
-  });
-};
-
-const customer = (req, res) => {
-  res.status(200).json({
-    message: "Customer Dashboard",
-  });
-};
-
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userModel.find({});
   res.status(200).json(new ApiResponse(200, users, "Fetch All users"));
@@ -162,8 +196,6 @@ const updateUser = asyncHandler(async (req, res) => {
 export {
   register,
   login,
-  admin,
-  customer,
   logout,
   getUsers,
   getUserById,

@@ -51,7 +51,7 @@ const isUser = (req,res,next)=>{
     }
     else
     {
-        throw new ApiError(401,"Not authorized as customer");
+        throw new ApiError(401,"Not authorized as user");
     }
 }
 
