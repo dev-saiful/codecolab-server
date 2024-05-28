@@ -1,7 +1,5 @@
 import { Router } from "express";
 import {
-  admin,
-  customer,
   login,
   logout,
   register,
@@ -31,14 +29,14 @@ userRoute.post("/register", register);
  * @route http://localhost:{PORT}/api/v1/user/admin
  * @access private
  */
-userRoute.get("/admin", auth, isAdmin, admin);
+// userRoute.get("/admin", auth, isAdmin, admin);
 /**
  * @desc User Profile
  * @method GET
  * @route http://localhost:{PORT}/api/v1/user/customer
  * @access private
  */
-userRoute.get("/user", auth, isUser, customer);
+// userRoute.get("/user", auth, isUser, customer);
 /**
  * @desc User Logout
  * @method POST

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { asyncHandler } from "../utils/asyncHandler";
-import { mailSend } from "../config/configMail";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { mailSend } from "../config/configMail.js";
 
 const OTPSchema = mongoose.Schema({
   email: {
