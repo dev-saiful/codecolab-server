@@ -44,11 +44,5 @@ userRoute.post("/register", register);
  * @access private
  */
 userRoute.post("/logout", auth, logout);
-/**
- * @desc Token Refresh
- * @method POST
- * @route http://localhost:{PORT}/api/v1/user/refresh-token
- * @access private
- */
 
 export default userRoute;

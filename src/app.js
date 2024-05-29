@@ -5,6 +5,7 @@ dotenv.config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.routes.js";
+import postRoute from "./routes/post.routes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/v1",userRoute);
+app.use("/api/v1",postRoute);
 
 const __dirname = path.resolve();
 
