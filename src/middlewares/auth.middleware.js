@@ -13,7 +13,7 @@ const auth = asyncHandler(async(req,res,next)=>{
         {
            
                 const decode = jwt.verify(accessToken,process.env.ACCESS_TOKEN_SECRET);
-                req.user = await userModel.findOne({email:decode?.email}).select("-password -refreshToken");
+                req.user = await userModel.findOne({email:decode?.email}).select("-password");
                 next();
             
         }

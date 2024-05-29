@@ -88,11 +88,17 @@ const register = asyncHandler(async (req, res) => {
   if (isEqual === false) {
     throw new ApiError(400, "Mismatch passwords");
   }
-  // checking user already exists
+  // checking user email already exists
   const userExists = await userModel.findOne({ email });
   if (userExists) {
     throw new ApiError(400, "User Alreday Exists");
   }
+
+   // checking username already exists
+   const username = await userModel.findOne({ userName });
+   if (username) {
+     throw new ApiError(400, "UserName Alreday taken, try another");
+   }
 
   // find recent otp
   const recentOTP = await otpModel
