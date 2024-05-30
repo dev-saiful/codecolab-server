@@ -22,8 +22,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use("/api/v1",userRoute);
-app.use("/api/v1",postRoute);
+app.use("/api/v1/user",userRoute);
+app.use("/api/v1/post",postRoute);
 
 const __dirname = path.resolve();
 

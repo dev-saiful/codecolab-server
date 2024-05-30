@@ -16,6 +16,12 @@ const commentSchema = mongoose.Schema({
 
 
 const postSchema = mongoose.Schema({
+    postAuthor:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+        required:true,
+
+    },
     title:{
         type:String,
         required:true,
@@ -24,12 +30,7 @@ const postSchema = mongoose.Schema({
         type:String,
         required:true,
     },
-    postAuthor:{
-        type:Schema.Types.ObjectId,
-        ref:"User",
-        required:true,
 
-    },
     comments:[commentSchema],
     vote:{
         type:Boolean
