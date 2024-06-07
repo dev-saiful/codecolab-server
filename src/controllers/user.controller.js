@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
+import { generate } from "otp-generator";
+import validator from "validator";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { userModel } from "../models/user.model.js";
 import { ApiError } from "../utils/apiError.js";
 import generateToken from "../utils/generateToken.js";
-import { generate } from "otp-generator";
-import { otpModel } from "../models/otp.model.js";
-import validator from "validator";
+import {otpModel,userModel} from "../models/index.js";
+
 import { checkEmail, checkEmpty, isMatch } from "../utils/validate.js";
 
 // send OTP

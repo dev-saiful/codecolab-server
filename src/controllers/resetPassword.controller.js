@@ -1,9 +1,9 @@
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { userModel } from "../models/user.model.js";
-import { ApiError } from "../utils/apiError.js";
-import {mailSend} from "../config/configMail.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { userModel } from "../models/index.js";
+import { ApiError } from "../utils/apiError.js";
+import {mailSend} from "../config/configMail.js";
 import {isMatch} from '../utils/validate.js';
 
 //  reset password token generate
@@ -81,7 +81,16 @@ flag = isMatch(password,confirmPassword);
                 });
 });
 
+
+
+// change password
+
+const changePassword = asyncHandler(async(req,res)=>{
+
+});
+
 export {
     resetPasswordToken,
     resetPassword,
+    changePassword,
 }

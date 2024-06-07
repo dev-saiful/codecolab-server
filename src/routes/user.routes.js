@@ -3,46 +3,75 @@ import {
   login,
   logout,
   register,
-} from "../controllers/user.controller.js";
+  getUserById,
+  getUsers,
+  updateUser,
+  deleteUser,
+} from "../controllers/index.js";
 import { auth, isAdmin, isUser } from "../middlewares/auth.middleware.js";
 
 const userRoute = Router();
+
 /**
  * @desc Login User
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/login
- * @params name,email,password,role
+ * @params 
  * @access public
  */
 userRoute.post("/login", login);
+
 /**
  * @desc Register User
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/register
- * @params name,email,password,role
+ * @params 
  * @access public
  */
 userRoute.post("/register", register);
-/**
- * @desc Admin Profile
- * @method GET
- * @route http://localhost:{PORT}/api/v1/user/admin
- * @access private
- */
-// userRoute.get("/admin", auth, isAdmin, admin);
-/**
- * @desc User Profile
- * @method GET
- * @route http://localhost:{PORT}/api/v1/user/customer
- * @access private
- */
-// userRoute.get("/user", auth, isUser, customer);
+
 /**
  * @desc User Logout
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/logout
  * @access private
  */
-userRoute.post("/logout", auth, logout);
+userRoute.post("/logout", logout);
+
+
+/**
+ * @desc Get all user
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/user/
+ * @access private
+ */
+userRoute.get("/",auth,isAdmin,getUsers);
+
+/**
+ * @desc Get user by id
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/user/:id
+ * @access private
+ */
+userRoute.get("/:id",auth,isUser,getUserById);
+userRoute.get("/:id",auth,isAdmin,getUserById);
+
+/**
+ * @desc Update user by id
+ * @method PUT
+ * @route http://localhost:{PORT}/api/v1/user/:id
+ * @access private
+ */
+userRoute.put("/:id",auth,isUser,updateUser);
+userRoute.put("/:id",auth,isAdmin,updateUser);
+
+/**
+ * @desc Delete user by id
+ * @method DELETE
+ * @route http://localhost:{PORT}/api/v1/user/:id
+ * @access private
+ */
+userRoute.delete("/:id",auth,isUser,deleteUser);
+userRoute.delete("/:id",auth,isAdmin,deleteUser);
 
 export default userRoute;
