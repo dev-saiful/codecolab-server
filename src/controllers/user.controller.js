@@ -268,4 +268,5 @@ export {
   getUserById,
   deleteUser,
   updateUser,
+  sendOTP,
 };

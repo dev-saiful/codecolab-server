@@ -6,6 +6,7 @@ import {
   getUserById,
   deleteUser,
   updateUser,
+  sendOTP,
 } from "./user.controller.js";
 import { getPosts, createPost } from "./post.controller.js";
 import {
@@ -27,5 +28,6 @@ export {
   createPost,
   resetPassword,
   resetPasswordToken,
-  changePassword
+  changePassword,
+  sendOTP
 };

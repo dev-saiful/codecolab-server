@@ -7,10 +7,21 @@ import {
   getUsers,
   updateUser,
   deleteUser,
+sendOTP
 } from "../controllers/index.js";
 import { auth, isAdmin, isUser } from "../middlewares/auth.middleware.js";
 
+
 const userRoute = Router();
+
+/**
+ * @desc Send OTP
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/user/send-otp
+ * @params 
+ * @access public
+ */
+userRoute.post("/send-otp", sendOTP);
 
 /**
  * @desc Login User
