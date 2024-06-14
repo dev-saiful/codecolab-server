@@ -14,7 +14,7 @@ import {
   resetPassword,
   changePassword
 } from "./resetPassword.controller.js";
-import {} from "";
+
 
 export {
   register,

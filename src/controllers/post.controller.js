@@ -1,13 +1,16 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { postModel } from "../models/post.model";
-import { isEmpty } from "validator";
-import { ApiError } from "../utils/apiError";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { postModel } from "../models/post.model.js";
+import validator from "validator";
+import { ApiError } from "../utils/apiError.js";
 
 // create post
 const createPost = asyncHandler(async (req, res) => {
   const { title, content, category, tags } = req.body;
   // check field is empty or not
-  let flag = isEmpty(title) || isEmpty(content) || isEmpty(category);
+  let flag =
+    validator.isEmpty(title) ||
+    validator.isEmpty(content) ||
+    validator.isEmpty(category);
   if (flag) {
     throw new ApiError(400, "Field must be filled up");
   }
@@ -37,16 +40,15 @@ const createPost = asyncHandler(async (req, res) => {
 // get all post
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await postModel.find({});
-// check post available or not
+  // check post available or not
   if (posts.length < 0) {
     throw new ApiError(400, "No posts found");
   }
-return res.status(200).json({
-    success:true,
-    message:"Posts found",
+  return res.status(200).json({
+    success: true,
+    message: "Posts found",
     posts,
-});
-
+  });
 });
 
 export { getPosts, createPost };
