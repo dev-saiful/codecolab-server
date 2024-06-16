@@ -15,7 +15,7 @@ export const mailSend = async(email,title,body)=>{
             secure:true,
             port:465,
             auth:{
-                user:"codecollab.inc@gmail.com",
+                user:"opensource.ad@gmail.com",
                 pass:process.env.SMPT_GMAIL_KEY,
             }
         });

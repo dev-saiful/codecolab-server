@@ -21,11 +21,13 @@ const OTPSchema = mongoose.Schema({
 // send OTP
 
 const sendVerificationMail = asyncHandler(async (email, otp) => {
+  console.log(email, otp);
   const mailRes = await mailSend(
     email,
     "Verification email from CodeColab",
     otp
   );
+// console.log(mailRes);
   // success
   if (mailRes) {
     console.log("Email sent ", mailRes);

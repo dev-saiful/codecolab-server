@@ -63,6 +63,7 @@ const register = asyncHandler(async (req, res) => {
     description,
     otp,
   } = req.body;
+  console.log(otp);
   // checking empty field
   const result = checkEmpty(
     fullName,
@@ -107,7 +108,7 @@ const register = asyncHandler(async (req, res) => {
     .limit(1);
   if (recentOTP.length == 0) {
     throw new ApiError(400, "OTP not found");
-  } else if (otp !== recentOTP.otp) {
+  } else if (otp !== recentOTP[0].otp) {
     throw new ApiError(400, "Invalid otp");
   }
   // hashing password
