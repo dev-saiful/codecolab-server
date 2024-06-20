@@ -8,13 +8,26 @@ import {
   updateUser,
   sendOTP,
 } from "./user.controller.js";
-import { getPosts, createPost } from "./post.controller.js";
+
+import {
+  createPost,
+  getPosts,
+  getPostById,
+  updatePost,
+  deletePost,
+  createComment,
+  updateComment,
+  deleteComment,
+  createVote,
+  updateVote,
+  deleteVote,
+} from "./post.controller.js";
+
 import {
   resetPasswordToken,
   resetPassword,
-  changePassword
+  changePassword,
 } from "./resetPassword.controller.js";
-
 
 export {
   register,
@@ -26,8 +39,17 @@ export {
   updateUser,
   getPosts,
   createPost,
+  getPostById,
+  updatePost,
+  deletePost,
+  createComment,
+  updateComment,
+  deleteComment,
+  createVote,
+  updateVote,
+  deleteVote,
   resetPassword,
   resetPasswordToken,
   changePassword,
-  sendOTP
+  sendOTP,
 };

@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { postModel } from "../models/post.model.js";
+import { postModel } from "../models/index.js";
 import validator from "validator";
 import { ApiError } from "../utils/apiError.js";
 
@@ -51,4 +51,77 @@ const getPosts = asyncHandler(async (req, res) => {
   });
 });
 
-export { getPosts, createPost };
+// get all post by comment:TODO
+const getPostsByComment = asyncHandler(async(req,res)=>{
+
+});
+
+
+// get all post by tags: TODO
+const getPostsByTags = asyncHandler(async(req,res)=>{
+
+});
+
+// get post by id
+const getPostById = asyncHandler(async (req, res) => {
+  const post = await postModel.findById(req.params.id);
+  // check post available or not
+  if (post.length < 0) {
+    throw new ApiError(400, "Post not found");
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Post found",
+    post,
+  });
+});
+
+// update post:TODO
+const updatePost = asyncHandler(async (req, res) => {
+  // retrive data from body
+  const { title, content, category, tags } = req.body;
+  const post = await postModel.findById(req.params.id);
+  // check post available or not
+  if (post.length < 0) {
+    throw new ApiError(400, "Post not found");
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Post update successfully",
+    post,
+  });
+});
+
+// delete post: TODO
+const deletePost = asyncHandler(async (req, res) => {
+  const post = await postModel.findById(req.params.id);
+  // check post available or not
+  if (post.length < 0) {
+    throw new ApiError(400, "No post found");
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Post delete successfully",
+    post,
+  });
+});
+
+// create post comment : TODO
+const createComment = asyncHandler(async (req, res) => {});
+
+// update post comment : TODO
+const updateComment = asyncHandler(async (req, res) => {});
+
+// delete post comment : TODO
+const deleteComment = asyncHandler(async (req, res) => {});
+
+// create a vote in a comment: TODO
+const createVote = asyncHandler(async (req, res) => {});
+
+// update a vote in a comment: TODO
+const updateVote = asyncHandler(async (req, res) => {});
+
+// delete a vote in a comment: TODO
+const deleteVote = asyncHandler(async (req, res) => {});
+
+export { getPosts, createPost, getPostById, getPostsByComment,getPostsByTags, updatePost, deletePost,createComment,updateComment,deleteComment,createVote,updateVote,deleteVote };

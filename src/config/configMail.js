@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import nodemailer from "nodemailer";
-import nodemailerSendgrid from "nodemailer-sendgrid";
+// import nodemailerSendgrid from "nodemailer-sendgrid";
 
 export const mailSend = async(email,title,body)=>{
     try

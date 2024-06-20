@@ -4,7 +4,7 @@ import validator from "validator";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import generateToken from "../utils/generateToken.js";
-import {otpModel,userModel} from "../models/index.js";
+import { otpModel, userModel } from "../models/index.js";
 
 import { checkEmail, checkEmpty, isMatch } from "../utils/validate.js";
 
@@ -49,6 +49,7 @@ const sendOTP = asyncHandler(async (req, res) => {
   });
 });
 
+// register
 const register = asyncHandler(async (req, res) => {
   const {
     fullName,
@@ -95,11 +96,11 @@ const register = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User Alreday Exists");
   }
 
-   // checking username already exists
-   const username = await userModel.findOne({ userName });
-   if (username) {
-     throw new ApiError(400, "UserName Alreday taken, try another");
-   }
+  // checking username already exists
+  const username = await userModel.findOne({ userName });
+  if (username) {
+    throw new ApiError(400, "UserName Alreday taken, try another");
+  }
 
   // find recent otp
   const recentOTP = await otpModel
@@ -140,6 +141,7 @@ const register = asyncHandler(async (req, res) => {
   });
 });
 
+// login
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   // checking empty field
@@ -179,6 +181,7 @@ const login = asyncHandler(async (req, res) => {
   }
 });
 
+// logout
 const logout = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
@@ -192,6 +195,7 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
+// get all user
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userModel.find({});
   res.status(200).json({
@@ -201,6 +205,7 @@ const getUsers = asyncHandler(async (req, res) => {
   });
 });
 
+// get user by id
 const getUserById = asyncHandler(async (req, res) => {
   const user = await userModel.findById(req.params.id);
   if (user) {
@@ -216,33 +221,33 @@ const getUserById = asyncHandler(async (req, res) => {
     throw new ApiError(404, "user not found");
   }
 });
-// TODO : change filed names
+// update user
 const updateUser = asyncHandler(async (req, res) => {
   const user = await userModel.findById(req.params.id);
   if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.role = req.body.role || user.role;
+    user.fullName = req.body.fullName || user.fullName;
+    user.cfhandle = req.body.cfhandle || user.cfhandle;
+    user.cfrating = req.body.cfrating || user.cfrating;
+    user.image = req.body.image || user.image;
+    user.description = req.body.description || user.description;
 
     const updatedUser = await user.save();
+    // updateUser.password = undefined;
 
-    res.status(200).json(
-      new ApiResponse(
-        200,
-        {
-          _id: updatedUser._id,
-          name: updatedUser.name,
-          email: updatedUser.email,
-          role: updatedUser.role,
-        },
-        "User updated successfully"
-      )
-    );
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "User update successfully",
+        updatedUser,
+      })
+      .select("-password");
   } else {
     throw new ApiError(404, "user not found");
   }
 });
 
+// delete user
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await userModel.findById(req.params.id);
   if (user) {
@@ -258,8 +263,6 @@ const deleteUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "user not found");
   }
 });
-
-
 
 export {
   register,
