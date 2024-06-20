@@ -86,7 +86,33 @@ flag = isMatch(password,confirmPassword);
 // change password
 
 const changePassword = asyncHandler(async(req,res)=>{
+    // get user data from req.user
+    const user = await userModel.findById(req.user._id);
+    // get data from request body
+    const {currentPassword,newPassword,confirmPassword} = req.body;
+    const flag = validator.isEmpty(currentPassword) || validator.isEmpty(newPassword) || validator.isEmpty(confirmPassword);
+    if(flag)
+        {
+            throw new ApiError(400,"Field must be filled up");
+        }
+        // validate old password
+       const isPassWordMatch = await bcrypt.compare(currentPassword,user.password);
+       if(!isPassWordMatch)
+        {
+            throw new ApiError(401,"The password is incorrect");
+        }
+        // update password
+        const hashPass = await bcrypt.hash(newPassword,10);
+        const updatedPassword = await userModel.findByIdAndUpdate(req.user._id,{password:hashPass},{new:true});
+        if(!updatedPassword)
+            {
+                throw new ApiError(500,"Something went wrong while changing password");
+            }
 
+            return res.status(200).json({
+                success:true,
+                message:"Password update successfully",
+            })
 });
 
 export {

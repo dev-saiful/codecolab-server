@@ -7,7 +7,10 @@ import {
   getUsers,
   updateUser,
   deleteUser,
-sendOTP
+sendOTP,
+resetPassword,
+resetPasswordToken,
+changePassword
 } from "../controllers/index.js";
 import { auth, isAdmin, isUser } from "../middlewares/auth.middleware.js";
 
@@ -48,6 +51,30 @@ userRoute.post("/register", register);
  * @access private
  */
 userRoute.post("/logout", logout);
+
+/**
+ * @desc Reset password token
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/user/reset-password-token
+ * @access public
+ */
+userRoute.post("/reset-password-token", resetPasswordToken);
+
+/**
+ * @desc Reset password
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/user/reset-password
+ * @access public
+ */
+userRoute.post("/reset-password", resetPassword);
+
+/**
+ * @desc Reset password
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/user/reset-password
+ * @access public
+ */
+userRoute.put("/change-password",auth, isUser, changePassword);
 
 
 /**
