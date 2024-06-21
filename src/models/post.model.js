@@ -1,25 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-const commentSchema = mongoose.Schema(
-  {
-    commentAuthor: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-    votes: [voteSchema],
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const commentModel = mongoose.model("Comment", commentSchema);
-
 const voteSchema = new Schema(
   {
     voteAuthor: {
@@ -51,7 +31,25 @@ const voteSchema = new Schema(
 voteSchema.index({ voteAuthor: 1, item: 1 }, { unique: true });
 
 const voteModel = mongoose.model("Vote", voteSchema);
+const commentSchema = mongoose.Schema(
+  {
+    commentAuthor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+    votes: [voteSchema],
+  },
+  {
+    timestamps: true,
+  }
+);
 
+const commentModel = mongoose.model("Comment", commentSchema);
 const postSchema = mongoose.Schema(
   {
     postAuthor: {
