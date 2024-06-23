@@ -231,7 +231,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.image = req.body.image || user.image;
     user.description = req.body.description || user.description;
 
-    const updatedUser = await user.save();
+    const updatedUser = await user.save().select("-password");
     // updateUser.password = undefined;
 
     res
@@ -240,8 +240,7 @@ const updateUser = asyncHandler(async (req, res) => {
         success: true,
         message: "User update successfully",
         updatedUser,
-      })
-      .select("-password");
+      });
   } else {
     throw new ApiError(404, "user not found");
   }
