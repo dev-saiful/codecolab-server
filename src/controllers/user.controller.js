@@ -231,7 +231,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.image = req.body.image || user.image;
     user.description = req.body.description || user.description;
 
-    const updatedUser = await userModel.save();
+    const updatedUser = await user.save();
     // updateUser.password = undefined;
 
     res
