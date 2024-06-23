@@ -119,7 +119,6 @@ const createComment = asyncHandler(async (req, res) => {
       commentAuthor: req.user._id,
       comment,
     };
-
     post.comments.push(createComment);
     await post.save();
     res.status(201).json({
@@ -133,7 +132,24 @@ const createComment = asyncHandler(async (req, res) => {
 
 // update post comment : TODO
 const updateComment = asyncHandler(async (req, res) => {
-  
+  const {comment} = req.body;
+  const post = await postModel.findById(req.params.id);
+  if (!post) {
+    throw new ApiError(404, "Post not found");
+  }
+  const existingComment = post.comments.find(
+    (comment) => comment.commentAuthor.toString() === req.user._id.toString()
+  );
+  if(!existingComment)
+    {
+      throw new ApiError(404, "Comment not found");
+    }
+  existingComment.comment = comment;
+await post.save();
+  res.status(200).json({
+    success: true,
+    message: "Comment updated",
+  });
 });
 
 // delete post comment : TODO
