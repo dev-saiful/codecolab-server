@@ -223,17 +223,18 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 // update user
 const updateUser = asyncHandler(async (req, res) => {
+  const {fullName,cfhandle,cfrating,image,description} = req.body;
   const user = await userModel.findById(req.params.id).select("-password");
-  if (user) {
-    user.fullName = req.body.fullName || user.fullName;
-    user.cfhandle = req.body.cfhandle || user.cfhandle;
-    user.cfrating = req.body.cfrating || user.cfrating;
-    user.image = req.body.image || user.image;
-    user.description = req.body.description || user.description;
-
+  if (!user) {
+    throw new ApiError(404,"user not found");
+  }
+  user.fullName = fullName || user.fullName;
+  user.cfhandle = cfhandle || user.cfhandle;
+  user.cfrating = cfrating || user.cfrating;
+  user.image = image || user.image;
+  user.description = description || user.description;
     const updatedUser = await user.save();
     // updateUser.password = undefined;
-
     res
       .status(200)
       .json({
@@ -241,9 +242,7 @@ const updateUser = asyncHandler(async (req, res) => {
         message: "User update successfully",
         updatedUser,
       });
-  } else {
-    throw new ApiError(404, "user not found");
-  }
+  
 });
 
 // delete user
