@@ -223,7 +223,7 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 // update user
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await userModel.findById(req.params.id);
+  const user = await userModel.findById(req.params.id).select("-password");
   if (user) {
     user.fullName = req.body.fullName || user.fullName;
     user.cfhandle = req.body.cfhandle || user.cfhandle;
@@ -231,7 +231,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.image = req.body.image || user.image;
     user.description = req.body.description || user.description;
 
-    const updatedUser = await user.save().select("-password");
+    const updatedUser = await user.save();
     // updateUser.password = undefined;
 
     res
