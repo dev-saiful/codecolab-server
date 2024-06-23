@@ -63,7 +63,7 @@ postRoute.delete("/:id", auth, isUser, deletePost);
  * @route http://localhost:{PORT}/api/v1/post/create-comment
  * @access private
  */
-postRoute.post("/create-comment", auth, isUser, createComment);
+postRoute.post("/create-comment/:id", auth, isUser, createComment);
 
 /**
  * @desc update a comment

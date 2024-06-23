@@ -5,6 +5,7 @@ import { ApiError } from "../utils/apiError.js";
 
 // create post
 const createPost = asyncHandler(async (req, res) => {
+  const postAuthor = req.user._id;
   const { title, content, category, tags } = req.body;
   // check field is empty or not
   let flag =
@@ -17,6 +18,7 @@ const createPost = asyncHandler(async (req, res) => {
 
   // create post and save into db
   const post = await postModel.create({
+    postAuthor,
     title,
     content,
     category,
@@ -52,15 +54,10 @@ const getPosts = asyncHandler(async (req, res) => {
 });
 
 // get all post by comment:TODO
-const getPostsByComment = asyncHandler(async(req,res)=>{
-
-});
-
+const getPostsByComment = asyncHandler(async (req, res) => {});
 
 // get all post by tags: TODO
-const getPostsByTags = asyncHandler(async(req,res)=>{
-
-});
+const getPostsByTags = asyncHandler(async (req, res) => {});
 
 // get post by id
 const getPostById = asyncHandler(async (req, res) => {
@@ -106,15 +103,38 @@ const deletePost = asyncHandler(async (req, res) => {
   });
 });
 
-// create post comment : TODO
+// create post comment : DONE
 const createComment = asyncHandler(async (req, res) => {
-  const user = req.user;
-  const {comment} = req.body;
-  await commentModel.findOne({commentAuthor:user._id});
+  const { comment } = req.body;
+  const post = await postModel.findById(req.params.id);
+  if (post) {
+    const alreadyCommented = post.comments.find(
+      (comment) => comment.commentAuthor.toString() === req.user._id.toString()
+    );
+    if (alreadyCommented) {
+   throw new ApiError(400,"Already commented");
+    }
+
+    const createComment = {
+      commentAuthor: req.user._id,
+      comment,
+    };
+
+    post.comments.push(createComment);
+    await post.save();
+    res.status(201).json({
+      success: true,
+      message: "Comment created",
+    });
+  } else {
+    throw new ApiError(404, "Resource not found");
+  }
 });
 
 // update post comment : TODO
-const updateComment = asyncHandler(async (req, res) => {});
+const updateComment = asyncHandler(async (req, res) => {
+  
+});
 
 // delete post comment : TODO
 const deleteComment = asyncHandler(async (req, res) => {});
@@ -128,4 +148,18 @@ const updateVote = asyncHandler(async (req, res) => {});
 // delete a vote in a comment: TODO
 const deleteVote = asyncHandler(async (req, res) => {});
 
-export { getPosts, createPost, getPostById, getPostsByComment,getPostsByTags, updatePost, deletePost,createComment,updateComment,deleteComment,createVote,updateVote,deleteVote };
+export {
+  getPosts,
+  createPost,
+  getPostById,
+  getPostsByComment,
+  getPostsByTags,
+  updatePost,
+  deletePost,
+  createComment,
+  updateComment,
+  deleteComment,
+  createVote,
+  updateVote,
+  deleteVote,
+};
