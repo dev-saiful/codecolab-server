@@ -207,7 +207,8 @@ const getUsers = asyncHandler(async (req, res) => {
 
 // get user by id
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await userModel.findById(req.params.id);
+  const user = await userModel.findById(req.params.id).select("-password");
+  console.log(user);
   if (user) {
     res
       .status(200)
@@ -215,8 +216,7 @@ const getUserById = asyncHandler(async (req, res) => {
         success: true,
         message: "User fetched",
         user,
-      })
-      .select("-password");
+      });
   } else {
     throw new ApiError(404, "user not found");
   }

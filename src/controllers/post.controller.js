@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { postModel } from "../models/index.js";
+import { commentModel, postModel } from "../models/index.js";
 import validator from "validator";
 import { ApiError } from "../utils/apiError.js";
 
@@ -107,7 +107,11 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 // create post comment : TODO
-const createComment = asyncHandler(async (req, res) => {});
+const createComment = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const {comment} = req.body;
+  await commentModel.findOne({commentAuthor:user._id});
+});
 
 // update post comment : TODO
 const updateComment = asyncHandler(async (req, res) => {});
