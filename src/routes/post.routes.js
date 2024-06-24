@@ -87,7 +87,7 @@ postRoute.delete("/delete-comment/:id", auth, isUser, deleteComment);
  * @route http://localhost:{PORT}/api/v1/post/create-vote
  * @access private
  */
-postRoute.post("/create-vote", auth, isUser, createVote);
+postRoute.post("/:postId/comment/:commentId/create-vote", auth, isUser, createVote);
 
 /**
  * @desc update a vote

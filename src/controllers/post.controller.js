@@ -140,6 +140,7 @@ const updateComment = asyncHandler(async (req, res) => {
   const existingComment = post.comments.find(
     (comment) => comment.commentAuthor.toString() === req.user._id.toString()
   );
+  console.log(existingComment);
   if(!existingComment)
     {
       throw new ApiError(404, "Comment not found");
@@ -152,7 +153,7 @@ await post.save();
   });
 });
 
-// delete post comment : TODO
+// delete post comment : DONE
 const deleteComment = asyncHandler(async (req, res) => {
   const post = await postModel.findById(req.params.id);
   if (!post) {
@@ -177,7 +178,51 @@ const deleteComment = asyncHandler(async (req, res) => {
 });
 
 // create a vote in a comment: TODO
-const createVote = asyncHandler(async (req, res) => {});
+const createVote = asyncHandler(async (req, res) => {
+  const {voteType} = req.body;
+  const {postId,commentId} = req.params;
+  const post = await postModel.findById(postId);
+  // check invalid vote type
+  if (!["like", "dislike"].includes(voteType)) {
+    throw new ApiError(400, "Invalid vote type");
+  }
+  if(!post)
+    {
+      throw new ApiError(400, "Post not found");
+    }
+
+    if(post.comments.length < 0)
+      {
+        throw new ApiError(400, "No comments found");
+      }
+      const comment = post.comments.id(commentId);
+      if (!comment) {
+        throw new ApiError(404, "Comment not found");
+      }
+      //  check if the user has already voted on this comment
+      const existingVoteIndex = comment.votes.findIndex(
+        (vote) => vote.voteAuthor.toString() === req.user._id.toString()
+      );
+
+
+    if (existingVoteIndex !== -1) {
+      // User has already voted, update the existing vote
+      comment.votes[existingVoteIndex].voteType = voteType;
+    } else {
+      // User has not voted yet, create a new vote
+      comment.votes.push({
+        voteAuthor: req.user._id,
+        item: commentId, // Assuming you store comment ID in vote.item
+        isVote: true, // Optional: You can manage this based on your logic
+        voteType,
+      });
+    }
+    await post.save();
+    res.status(200).json({
+      success: true,
+      message: "Vote registered",
+    });
+});
 
 // update a vote in a comment: TODO
 const updateVote = asyncHandler(async (req, res) => {});
