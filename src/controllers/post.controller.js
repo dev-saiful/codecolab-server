@@ -130,7 +130,7 @@ const createComment = asyncHandler(async (req, res) => {
   }
 });
 
-// update post comment : TODO
+// update post comment : DONE
 const updateComment = asyncHandler(async (req, res) => {
   const {comment} = req.body;
   const post = await postModel.findById(req.params.id);
@@ -153,7 +153,28 @@ await post.save();
 });
 
 // delete post comment : TODO
-const deleteComment = asyncHandler(async (req, res) => {});
+const deleteComment = asyncHandler(async (req, res) => {
+  const post = await postModel.findById(req.params.id);
+  if (!post) {
+    throw new ApiError(404, "Post not found");
+  }
+
+  const commentIndex = post.comments.findIndex(
+    (comment) => comment.commentAuthor.toString() === req.user._id.toString()
+  );
+
+  if (commentIndex === -1) {
+    throw new ApiError(404, "Comment not found");
+  }
+
+  post.comments.splice(commentIndex, 1);
+  await post.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Comment deleted",
+  });
+});
 
 // create a vote in a comment: TODO
 const createVote = asyncHandler(async (req, res) => {});
