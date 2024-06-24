@@ -3,7 +3,7 @@ import { commentModel, postModel } from "../models/index.js";
 import validator from "validator";
 import { ApiError } from "../utils/apiError.js";
 
-// create post
+// create post :DONE
 const createPost = asyncHandler(async (req, res) => {
   const postAuthor = req.user._id;
   const { title, content, category, tags } = req.body;
@@ -39,7 +39,7 @@ const createPost = asyncHandler(async (req, res) => {
   });
 });
 
-// get all post
+// get all post : DONE
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await postModel.find({});
   // check post available or not
@@ -59,7 +59,10 @@ const getPostsByComment = asyncHandler(async (req, res) => {});
 // get all post by tags: TODO
 const getPostsByTags = asyncHandler(async (req, res) => {});
 
-// get post by id
+// get all post by vote: TODO
+const getPostsByVote = asyncHandler(async (req, res) => {});
+
+// get post by id : DONE
 const getPostById = asyncHandler(async (req, res) => {
   const post = await postModel.findById(req.params.id);
   // check post available or not
@@ -89,7 +92,7 @@ const updatePost = asyncHandler(async (req, res) => {
   });
 });
 
-// delete post: TODO
+// delete post: DONE
 const deletePost = asyncHandler(async (req, res) => {
   const post = await postModel.findById(req.params.id);
   // check post available or not
@@ -140,7 +143,7 @@ const updateComment = asyncHandler(async (req, res) => {
   const existingComment = post.comments.find(
     (comment) => comment.commentAuthor.toString() === req.user._id.toString()
   );
-  console.log(existingComment);
+ 
   if(!existingComment)
     {
       throw new ApiError(404, "Comment not found");
@@ -177,7 +180,7 @@ const deleteComment = asyncHandler(async (req, res) => {
   });
 });
 
-// create a vote in a comment: TODO
+// create a vote in a comment: DONE
 const createVote = asyncHandler(async (req, res) => {
   const {voteType} = req.body;
   const {postId,commentId} = req.params;
@@ -236,6 +239,7 @@ export {
   getPostById,
   getPostsByComment,
   getPostsByTags,
+  getPostsByVote,
   updatePost,
   deletePost,
   createComment,

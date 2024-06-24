@@ -12,6 +12,9 @@ import {
   createVote,
   updateVote,
   deleteVote,
+  getPostsByTags,
+  getPostsByComment,
+  getPostsByVote,
 } from "../controllers/index.js";
 
 const postRoute = Router();
@@ -32,6 +35,30 @@ postRoute.get("/", auth, isAdmin, getPosts);
  * @access private
  */
 postRoute.get(":/id", auth, isUser, getPostById);
+
+/**
+ * @desc Get post by tags : TODO
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/post/:id
+ * @access private
+ */
+postRoute.get(":/id", auth, isUser, getPostsByTags);
+
+/**
+ * @desc Get post by comment : TODO
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/post/:id
+ * @access private
+ */
+postRoute.get(":/id", auth, isUser, getPostsByComment);
+
+/**
+ * @desc Get post by vote :TODO
+ * @method POST
+ * @route http://localhost:{PORT}/api/v1/post/:id
+ * @access private
+ */
+postRoute.get(":/id", auth, isUser, getPostsByVote);
 
 /**
  * @desc Create a post
@@ -84,7 +111,7 @@ postRoute.delete("/delete-comment/:id", auth, isUser, deleteComment);
 /**
  * @desc create a vote
  * @method POST
- * @route http://localhost:{PORT}/api/v1/post/create-vote
+ * @route http://localhost:{PORT}/api/v1/post/:postId/comment/:commentId/create-vote
  * @access private
  */
 postRoute.post("/:postId/comment/:commentId/create-vote", auth, isUser, createVote);
