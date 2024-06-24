@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
 import userRoute from "./routes/user.routes.js";
 import postRoute from "./routes/post.routes.js";
 
@@ -19,6 +20,11 @@ app.use(
     credentials: true,
   })
 );
+app.use(fileUpload(
+  {
+    useTempFiles : true,
+  }
+));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
