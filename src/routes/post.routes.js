@@ -33,6 +33,7 @@ postRoute.get("/", auth, isAdmin, getPosts);
  * @access private
  */
 postRoute.get(":/id", auth, isUser, getPostById);
+postRoute.get(":/id", auth, isAdmin, getPostById);
 
 /**
  * @desc Get post by tags : DONE
@@ -41,6 +42,7 @@ postRoute.get(":/id", auth, isUser, getPostById);
  * @access private
  */
 postRoute.get("/tags-post", auth, isUser, getPostsByTags);
+postRoute.get("/tags-post", auth, isAdmin, getPostsByTags);
 
 /**
  * @desc Get posts by comment : DONE
@@ -49,6 +51,7 @@ postRoute.get("/tags-post", auth, isUser, getPostsByTags);
  * @access private
  */
 postRoute.get("/commented-post", auth, isUser, getPostsByComment);
+postRoute.get("/commented-post", auth, isAdmin, getPostsByComment);
 
 /**
  * @desc Get posts by vote :DONE
@@ -57,6 +60,7 @@ postRoute.get("/commented-post", auth, isUser, getPostsByComment);
  * @access private
  */
 postRoute.get("/voted-post", auth, isUser, getPostsByVote);
+postRoute.get("/voted-post", auth, isAdmin, getPostsByVote);
 
 /**
  * @desc Create a post
@@ -81,6 +85,7 @@ postRoute.put("/:id", auth, isUser, updatePost);
  * @access private
  */
 postRoute.delete("/:id", auth, isUser, deletePost);
+postRoute.delete("/:id", auth, isAdmin, deletePost);
 
 /**
  * @desc create a comment
@@ -105,6 +110,7 @@ postRoute.put("/update-comment/:id", auth, isUser, updateComment);
  * @access private
  */
 postRoute.delete("/delete-comment/:id", auth, isUser, deleteComment);
+postRoute.delete("/delete-comment/:id", auth, isAdmin, deleteComment);
 
 /**
  * @desc handling a vote
