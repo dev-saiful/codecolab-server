@@ -57,7 +57,18 @@ const getPosts = asyncHandler(async (req, res) => {
 const getPostsByComment = asyncHandler(async (req, res) => {});
 
 // get all post by tags: TODO
-const getPostsByTags = asyncHandler(async (req, res) => {});
+const getPostsByTags = asyncHandler(async (req, res) => {
+  const tags = req.query.tags ? req.query.tags.split(',').map(tag => tag.trim()) : [];
+  if (tags.length === 0) {
+    throw new ApiError(400,"Tags are required");
+  }
+  const posts = await postModel.find({ tags: { $in: tags } });
+  res.status(200).json({
+    success:true,
+    message:"Posts found",
+    posts,
+  });
+});
 
 // get all post by vote: TODO
 const getPostsByVote = asyncHandler(async (req, res) => {});
