@@ -133,6 +133,18 @@ const createComment = asyncHandler(async (req, res) => {
   }
 });
 
+// get  comment by id:TODO
+const getCommentById = asyncHandler(async(req,res)=>{
+
+});
+
+// get all comment :TODO
+const getComment = asyncHandler(async(req,res)=>{
+
+});
+
+
+
 // update post comment : DONE
 const updateComment = asyncHandler(async (req, res) => {
   const {comment} = req.body;
@@ -228,10 +240,82 @@ const createVote = asyncHandler(async (req, res) => {
 });
 
 // update a vote in a comment: TODO
-const updateVote = asyncHandler(async (req, res) => {});
+const updateVote = asyncHandler(async (req, res) => {
+  const { voteType } = req.body;
+  const { postId, commentId } = req.params;
+  const post = await postModel.findById(postId);
+  
+  // Check for invalid vote type
+  if (!["like", "dislike"].includes(voteType)) {
+    throw new ApiError(400, "Invalid vote type");
+  }
+  
+  if (!post) {
+    throw new ApiError(400, "Post not found");
+  }
+
+  if (post.comments.length < 0) {
+    throw new ApiError(400, "No comments found");
+  }
+
+  const comment = post.comments.id(commentId);
+  if (!comment) {
+    throw new ApiError(404, "Comment not found");
+  }
+
+  // Check if the user has already voted on this comment
+  const existingVoteIndex = comment.votes.findIndex(
+    (vote) => vote.voteAuthor.toString() === req.user._id.toString()
+  );
+
+  if (existingVoteIndex !== -1) {
+    // User has already voted, update the existing vote
+    comment.votes[existingVoteIndex].voteType = voteType;
+    await post.save();
+    res.status(200).json({
+      success: true,
+      message: "Vote updated",
+    });
+  } else {
+    throw new ApiError(404, "Vote not found");
+  }
+});
 
 // delete a vote in a comment: TODO
-const deleteVote = asyncHandler(async (req, res) => {});
+const deleteVote = asyncHandler(async (req, res) => {
+  const { postId, commentId } = req.params;
+  const post = await postModel.findById(postId);
+  
+  if (!post) {
+    throw new ApiError(400, "Post not found");
+  }
+
+  if (post.comments.length <= 0) {
+    throw new ApiError(400, "No comments found");
+  }
+
+  const comment = post.comments.id(commentId);
+  if (!comment) {
+    throw new ApiError(404, "Comment not found");
+  }
+
+  // Check if the user has already voted on this comment
+  const existingVoteIndex = comment.votes.findIndex(
+    (vote) => vote.voteAuthor.toString() === req.user._id.toString()
+  );
+
+  if (existingVoteIndex !== -1) {
+    // User has already voted, remove the existing vote
+    comment.votes.splice(existingVoteIndex, 1);
+    await post.save();
+    res.status(200).json({
+      success: true,
+      message: "Vote deleted",
+    });
+  } else {
+    throw new ApiError(404, "Vote not found");
+  }
+});
 
 export {
   getPosts,
@@ -240,6 +324,8 @@ export {
   getPostsByComment,
   getPostsByTags,
   getPostsByVote,
+  getComment,
+  getCommentById,
   updatePost,
   deletePost,
   createComment,

@@ -15,6 +15,8 @@ import {
   getPostsByTags,
   getPostsByComment,
   getPostsByVote,
+  getComment,
+  getCommentById,
 } from "../controllers/index.js";
 
 const postRoute = Router();
@@ -85,6 +87,22 @@ postRoute.put("/:id", auth, isUser, updatePost);
 postRoute.delete("/:id", auth, isUser, deletePost);
 
 /**
+ * @desc get a comment:TODO
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/post/get-comment/:id
+ * @access private
+ */
+postRoute.get("/get-comment/:id", auth, isUser, getCommentById);
+
+/**
+ * @desc get ALL comment:TODO
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/post/get-comment
+ * @access private
+ */
+postRoute.get("/get-comment", auth, isUser, getComment);
+
+/**
  * @desc create a comment
  * @method POST
  * @route http://localhost:{PORT}/api/v1/post/create-comment
@@ -122,7 +140,7 @@ postRoute.post("/:postId/comment/:commentId/create-vote", auth, isUser, createVo
  * @route http://localhost:{PORT}/api/v1/post/create-vote
  * @access private
  */
-postRoute.put("/update-vote/:id", auth, isUser, updateVote);
+postRoute.put("/:postId/comment/:commentId/update-vote", auth, isUser, updateVote);
 
 /**
  * @desc delete a vote
@@ -130,7 +148,7 @@ postRoute.put("/update-vote/:id", auth, isUser, updateVote);
  * @route http://localhost:{PORT}/api/v1/post/create-vote
  * @access private
  */
-postRoute.delete("/delete-vote/:id", auth, isUser, deleteVote);
+postRoute.delete("/:postId/comment/:commentId/delete-vote", auth, isUser, deleteVote);
 
 
 export default postRoute;
