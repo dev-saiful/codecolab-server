@@ -197,7 +197,7 @@ const deleteComment = asyncHandler(async (req, res) => {
   });
 });
 
-// hanlde Vote in a comment
+// hanlde Vote in a comment :DONE
 const handleVote = asyncHandler(async (req, res) => {
   const { voteType } = req.body;
   const { postId, commentId } = req.params;
