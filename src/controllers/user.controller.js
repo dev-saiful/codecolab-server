@@ -3,18 +3,14 @@ dotenv.config();
 import bcrypt from "bcrypt";
 import { generate } from "otp-generator";
 import validator from "validator";
-import { v2 } from "cloudinary";
+import { v2 } from "../utils/cloudinary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import generateToken from "../utils/generateToken.js";
 import { otpModel, userModel } from "../models/index.js";
 import { checkEmail, checkEmpty, isMatch } from "../utils/validate.js";
 
-v2.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
+
 
 // send OTP
 const sendOTP = asyncHandler(async (req, res) => {
