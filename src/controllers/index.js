@@ -23,9 +23,7 @@ import {
   createComment,
   updateComment,
   deleteComment,
-  createVote,
-  updateVote,
-  deleteVote,
+  handleVote,
 } from "./post.controller.js";
 
 import {
@@ -55,9 +53,7 @@ export {
   createComment,
   updateComment,
   deleteComment,
-  createVote,
-  updateVote,
-  deleteVote,
+  handleVote,
   resetPassword,
   resetPasswordToken,
   changePassword,
