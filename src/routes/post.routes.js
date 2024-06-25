@@ -12,8 +12,6 @@ import {
   getPostsByTags,
   getPostsByComment,
   getPostsByVote,
-  getComment,
-  getCommentById,
   handleVote,
 } from "../controllers/index.js";
 
@@ -37,28 +35,28 @@ postRoute.get("/", auth, isAdmin, getPosts);
 postRoute.get(":/id", auth, isUser, getPostById);
 
 /**
- * @desc Get post by tags : TODO
+ * @desc Get post by tags : DONE
  * @method POST
- * @route http://localhost:{PORT}/api/v1/post/:id
+ * @route http://localhost:{PORT}/api/v1/post/tags-post
  * @access private
  */
-postRoute.get(":/id", auth, isUser, getPostsByTags);
+postRoute.get("/tags-post", auth, isUser, getPostsByTags);
 
 /**
- * @desc Get post by comment : TODO
+ * @desc Get posts by comment : DONE
  * @method POST
- * @route http://localhost:{PORT}/api/v1/post/:id
+ * @route http://localhost:{PORT}/api/v1/post/commented-post
  * @access private
  */
-postRoute.get(":/id", auth, isUser, getPostsByComment);
+postRoute.get("/commented-post", auth, isUser, getPostsByComment);
 
 /**
- * @desc Get post by vote :TODO
+ * @desc Get posts by vote :DONE
  * @method POST
- * @route http://localhost:{PORT}/api/v1/post/:id
+ * @route http://localhost:{PORT}/api/v1/post/voted-post
  * @access private
  */
-postRoute.get(":/id", auth, isUser, getPostsByVote);
+postRoute.get("/voted-post", auth, isUser, getPostsByVote);
 
 /**
  * @desc Create a post
@@ -85,25 +83,9 @@ postRoute.put("/:id", auth, isUser, updatePost);
 postRoute.delete("/:id", auth, isUser, deletePost);
 
 /**
- * @desc get a comment:TODO
- * @method GET
- * @route http://localhost:{PORT}/api/v1/post/get-comment/:id
- * @access private
- */
-postRoute.get("/get-comment/:id", auth, isUser, getCommentById);
-
-/**
- * @desc get ALL comment:TODO
- * @method GET
- * @route http://localhost:{PORT}/api/v1/post/get-comment
- * @access private
- */
-postRoute.get("/get-comment", auth, isUser, getComment);
-
-/**
  * @desc create a comment
  * @method POST
- * @route http://localhost:{PORT}/api/v1/post/create-comment
+ * @route http://localhost:{PORT}/api/v1/post/create-comment/:id
  * @access private
  */
 postRoute.post("/create-comment/:id", auth, isUser, createComment);

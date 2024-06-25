@@ -53,26 +53,6 @@ const getPosts = asyncHandler(async (req, res) => {
   });
 });
 
-// get all post by comment:TODO
-const getPostsByComment = asyncHandler(async (req, res) => {});
-
-// get all post by tags: TODO
-const getPostsByTags = asyncHandler(async (req, res) => {
-  const tags = req.query.tags ? req.query.tags.split(',').map(tag => tag.trim()) : [];
-  if (tags.length === 0) {
-    throw new ApiError(400,"Tags are required");
-  }
-  const posts = await postModel.find({ tags: { $in: tags } });
-  res.status(200).json({
-    success:true,
-    message:"Posts found",
-    posts,
-  });
-});
-
-// get all post by vote: TODO
-const getPostsByVote = asyncHandler(async (req, res) => {});
-
 // get post by id : DONE
 const getPostById = asyncHandler(async (req, res) => {
   const post = await postModel.findById(req.params.id);
@@ -86,6 +66,54 @@ const getPostById = asyncHandler(async (req, res) => {
     post,
   });
 });
+
+
+// get all post by comment:DONE
+const getPostsByComment = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const posts = await postModel.find({'comments.commentAuthor':userId});
+  if(!posts)
+    {
+      throw new ApiError(404,"No post found");
+    }
+    res.status(200).json({
+      success:true,
+      message:"Posts found",
+      posts,
+    })
+});
+
+// get all post by tags: DONE
+const getPostsByTags = asyncHandler(async (req, res) => {
+  const tags = req.query.tags ? req.query.tags.split(',').map(tag => tag.trim()) : [];
+  if (!tags || tags.length === 0) {
+    throw new ApiError(400,"Tags are required");
+  }
+  const posts = await postModel.find({ tags: { $in: tags } });
+  res.status(200).json({
+    success:true,
+    message:"Posts found",
+    posts,
+  });
+});
+
+// get all post by vote: DONE
+const getPostsByVote = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const posts = await postModel.find({ 'comments.votes.voteAuthor': userId });
+
+  if (!posts || posts.length === 0) {
+    throw new ApiError(404, "No posts found");
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Posts found",
+    posts,
+  });
+
+});
+
 
 // update post:DONE
 const updatePost = asyncHandler(async (req, res) => {
@@ -148,18 +176,6 @@ const createComment = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Resource not found");
   }
 });
-
-// get  comment by id:TODO
-const getCommentById = asyncHandler(async(req,res)=>{
-
-});
-
-// get all comment :TODO
-const getComment = asyncHandler(async(req,res)=>{
-
-});
-
-
 
 // update post comment : DONE
 const updateComment = asyncHandler(async (req, res) => {
@@ -279,8 +295,6 @@ export {
   getPostsByComment,
   getPostsByTags,
   getPostsByVote,
-  getComment,
-  getCommentById,
   updatePost,
   deletePost,
   createComment,
