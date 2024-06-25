@@ -10,9 +10,9 @@ import generateToken from "../utils/generateToken.js";
 import { otpModel, userModel } from "../models/index.js";
 import { checkEmail, checkEmpty, isMatch } from "../utils/validate.js";
 
-v2.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
+v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
@@ -218,47 +218,58 @@ const getUserById = asyncHandler(async (req, res) => {
   const user = await userModel.findById(req.params.id).select("-password");
   console.log(user);
   if (user) {
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "User fetched",
-        user,
-      });
+    res.status(200).json({
+      success: true,
+      message: "User fetched",
+      user,
+    });
   } else {
     throw new ApiError(404, "user not found");
   }
 });
 // update user
 const updateUser = asyncHandler(async (req, res) => {
-
+  const { fullName, cfhandle, cfrating, image, description } = req.body;
   let user = await userModel.findById(req.params.id).select("-password");
   if (!user) {
-    throw new ApiError(404,"user not found");
+    throw new ApiError(404, "user not found");
   }
-  const file = req.files.image;
-  v2.uploader.upload(file.tempFilePath,async(err,result)=>{
-    // const {fullName,cfhandle,cfrating,image,description} = req.body;
-    if (err) {
-      throw new ApiError(500, "Image upload failed");
-    }
-    user.fullName = req.body.fullName || user.fullName;
-    user.cfhandle = req.body.cfhandle || user.cfhandle;
-    user.cfrating = req.body.cfrating || user.cfrating;
-    user.image = result.secure_url || user.image;
-    user.description = req.body.description || user.description;
 
-    await user.save();
+  const result = await v2.uploader.upload(image);
+  user.fullName = fullName || user.fullName;
+  user.cfhandle = cfhandle || user.cfhandle;
+  user.cfrating = cfrating || user.cfrating;
+  user.image = result.secure_url || user.image;
+  user.description = description || user.description;
 
-     res
-     .status(200)
-     .json({
-       success: true,
-       message: "User update successfully",
-       user,
-     });
+  await user.save();
+  res.status(200).json({
+    success: true,
+    message: "User update successfully",
+    user,
   });
+  // const file = req.files.image;
+  // v2.uploader.upload(file.tempFilePath,async(err,result)=>{
+  //   // const {fullName,cfhandle,cfrating,image,description} = req.body;
+  //   if (err) {
+  //     throw new ApiError(500, "Image upload failed");
+  //   }
+  //   user.fullName = req.body.fullName || user.fullName;
+  //   user.cfhandle = req.body.cfhandle || user.cfhandle;
+  //   user.cfrating = req.body.cfrating || user.cfrating;
+  //   user.image = result.secure_url || user.image;
+  //   user.description = req.body.description || user.description;
 
+  //   await user.save();
+
+  //    res
+  //    .status(200)
+  //    .json({
+  //      success: true,
+  //      message: "User update successfully",
+  //      user,
+  //    });
+  // });
 });
 
 // delete user

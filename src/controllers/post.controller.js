@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { commentModel, postModel } from "../models/index.js";
+import { postModel } from "../models/index.js";
 import validator from "validator";
 import { ApiError } from "../utils/apiError.js";
 
@@ -76,7 +76,7 @@ const getPostById = asyncHandler(async (req, res) => {
   });
 });
 
-// update post:TODO
+// update post:DONE
 const updatePost = asyncHandler(async (req, res) => {
   // retrive data from body
   const { title, content, category, tags } = req.body;
@@ -85,7 +85,12 @@ const updatePost = asyncHandler(async (req, res) => {
   if (post.length < 0) {
     throw new ApiError(400, "Post not found");
   }
-  return res.status(200).json({
+post.title = title || post.title;
+post.content = content || post.content;
+post.category = category || post.category;
+post.tags = tags || post.tags;
+await post.save();
+   res.status(200).json({
     success: true,
     message: "Post update successfully",
     post,
@@ -239,7 +244,7 @@ const createVote = asyncHandler(async (req, res) => {
     });
 });
 
-// update a vote in a comment: TODO
+// update a vote in a comment: DONE
 const updateVote = asyncHandler(async (req, res) => {
   const { voteType } = req.body;
   const { postId, commentId } = req.params;
@@ -281,7 +286,7 @@ const updateVote = asyncHandler(async (req, res) => {
   }
 });
 
-// delete a vote in a comment: TODO
+// delete a vote in a comment: DONE
 const deleteVote = asyncHandler(async (req, res) => {
   const { postId, commentId } = req.params;
   const post = await postModel.findById(postId);
