@@ -20,7 +20,6 @@ const userRoute = Router();
  * @desc Send OTP
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/send-otp
- * @params
  * @access public
  */
 userRoute.post("/send-otp", sendOTP);
@@ -29,7 +28,6 @@ userRoute.post("/send-otp", sendOTP);
  * @desc Login User
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/login
- * @params
  * @access public
  */
 userRoute.post("/login", login);
@@ -38,7 +36,6 @@ userRoute.post("/login", login);
  * @desc Register User
  * @method POST
  * @route http://localhost:{PORT}/api/v1/user/register
- * @params
  * @access public
  */
 userRoute.post("/register", register);
@@ -68,15 +65,15 @@ userRoute.post("/reset-password-token", resetPasswordToken);
 userRoute.post("/reset-password", resetPassword);
 
 /**
- * @desc Reset password
- * @method POST
- * @route http://localhost:{PORT}/api/v1/user/reset-password
- * @access public
+ * @desc Change password
+ * @method PUT
+ * @route http://localhost:{PORT}/api/v1/user/change-password
+ * @access private
  */
 userRoute.put("/change-password", auth, isUser, changePassword);
 
 /**
- * @desc Get all user
+ * @desc Get all users
  * @method GET
  * @route http://localhost:{PORT}/api/v1/user/
  * @access private
@@ -84,7 +81,7 @@ userRoute.put("/change-password", auth, isUser, changePassword);
 userRoute.get("/", auth, isAdmin, getUsers);
 
 /**
- * @desc Get user by id
+ * @desc Get user by ID
  * @method GET
  * @route http://localhost:{PORT}/api/v1/user/:id
  * @access private
@@ -93,7 +90,7 @@ userRoute.get("/:id", auth, isUser, getUserById);
 userRoute.get("/:id", auth, isAdmin, getUserById);
 
 /**
- * @desc Update user by id
+ * @desc Update user by ID
  * @method PUT
  * @route http://localhost:{PORT}/api/v1/user/:id
  * @access private
@@ -102,7 +99,7 @@ userRoute.put("/:id", auth, isUser, updateUser);
 userRoute.put("/:id", auth, isAdmin, updateUser);
 
 /**
- * @desc Delete user by id
+ * @desc Delete user by ID
  * @method DELETE
  * @route http://localhost:{PORT}/api/v1/user/:id
  * @access private

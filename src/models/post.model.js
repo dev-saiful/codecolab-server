@@ -30,7 +30,7 @@ const voteSchema = new Schema(
 // Ensure that a user can only have one type of vote (like or dislike) per item
 voteSchema.index({ voteAuthor: 1, item: 1 }, { unique: true });
 
-const voteModel = mongoose.model("Vote", voteSchema);
+
 const commentSchema = mongoose.Schema(
   {
     commentAuthor: {
@@ -49,7 +49,7 @@ const commentSchema = mongoose.Schema(
   }
 );
 
-const commentModel = mongoose.model("Comment", commentSchema);
+
 const postSchema = mongoose.Schema(
   {
     postAuthor: {
@@ -82,4 +82,4 @@ const postSchema = mongoose.Schema(
 
 const postModel = mongoose.model("Post", postSchema);
 
-export { commentModel, voteModel, postModel };
+export {postModel };
