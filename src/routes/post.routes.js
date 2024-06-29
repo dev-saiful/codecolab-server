@@ -23,8 +23,8 @@ const postRoute = Router();
  * @route http://localhost:{PORT}/api/v1/post
  * @access private
  */
-postRoute.get("/", auth, isUser, getPosts);
-postRoute.get("/", auth, isAdmin, getPosts);
+postRoute.get("/", getPosts);
+
 
 /**
  * @desc Get post by Id
@@ -32,8 +32,16 @@ postRoute.get("/", auth, isAdmin, getPosts);
  * @route http://localhost:{PORT}/api/v1/post/:id
  * @access private
  */
-postRoute.get("/:id", auth, isUser, getPostById);
-postRoute.get("/:id", auth, isAdmin, getPostById);
+postRoute.get("/:id",getPostById);
+
+/**
+ * @desc Get post by post author
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/post/
+ * @access private
+ */
+// postRoute.get();
+
 
 /**
  * @desc Get posts by tags
@@ -41,8 +49,7 @@ postRoute.get("/:id", auth, isAdmin, getPostById);
  * @route http://localhost:{PORT}/api/v1/post/tags-post
  * @access private
  */
-postRoute.get("/tags-post", auth, isUser, getPostsByTags);
-postRoute.get("/tags-post", auth, isAdmin, getPostsByTags);
+postRoute.get("/tags-post", getPostsByTags);
 
 /**
  * @desc Get posts by commented
