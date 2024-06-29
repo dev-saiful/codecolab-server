@@ -1,59 +1,9 @@
-import mongoose, { Schema } from "mongoose";
-
-const voteSchema = new Schema(
-  {
-    voteAuthor: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    item: {
-      type: Schema.Types.ObjectId,
-      ref: "Comment",
-      required: true,
-    },
-    isVote: {
-      type: Boolean,
-      default: false,
-    },
-    voteType: {
-      type: String,
-      enum: ["like", "dislike"],
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-// Ensure that a user can only have one type of vote (like or dislike) per item
-voteSchema.index({ voteAuthor: 1, item: 1 }, { unique: true });
-
-
-const commentSchema = mongoose.Schema(
-  {
-    commentAuthor: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-    votes: [voteSchema],
-  },
-  {
-    timestamps: true,
-  }
-);
-
+import mongoose from "mongoose";
 
 const postSchema = mongoose.Schema(
   {
     postAuthor: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -66,7 +16,7 @@ const postSchema = mongoose.Schema(
       required: true,
     },
 
-    comments: [commentSchema],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     category: {
       type: String,
       required: true,
@@ -82,4 +32,4 @@ const postSchema = mongoose.Schema(
 
 const postModel = mongoose.model("Post", postSchema);
 
-export {postModel };
+export { postModel };

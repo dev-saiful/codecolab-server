@@ -5,14 +5,14 @@ const userSchema = mongoose.Schema(
     fullName: {
       type: String,
       required: [true, "Must be fill up fullname"],
-      minLength: [8,"Minimum length 8"],
+      minLength: [8,"Minimum length 4"],
       maxLenght: [32,"Maximum length 32"],
     },
     userName: {
       type: String,
       unique: true,
       required: [true, "Must be fill up username"],
-      minLength: [8,"Minimum length 8"],
+      minLength: [8,"Minimum length 4"],
       maxLenght: [32,"Maximum length 32"],
       trim: true,
     },

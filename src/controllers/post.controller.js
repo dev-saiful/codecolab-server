@@ -32,7 +32,7 @@ const createPost = asyncHandler(async (req, res) => {
     );
   }
 
-   res.status(201).json({
+  res.status(201).json({
     success: true,
     message: "Post created successfully",
     post,
@@ -45,7 +45,7 @@ const getPosts = asyncHandler(async (req, res) => {
   let posts;
 
   if (title) {
-    posts = await postModel.find({ title: { $regex: title, $options: 'i' } });
+    posts = await postModel.find({ title: { $regex: title, $options: "i" } });
   } else {
     posts = await postModel.find({});
   }
@@ -55,18 +55,18 @@ const getPosts = asyncHandler(async (req, res) => {
     throw new ApiError(400, "No posts found");
   }
 
-   res.status(200).json({
+  res.status(200).json({
     success: true,
     message: "Posts found",
     posts,
   });
-})
+});
 
 // get post by id : DONE
 const getPostById = asyncHandler(async (req, res) => {
   // Fetch the post by ID from the database
   const post = await postModel.findById(req.params.id);
-  
+
   // Check if the post is available or not
   // The length property check is incorrect for a single post object
   // Use 'if (!post)' to check if no post is found
@@ -74,7 +74,7 @@ const getPostById = asyncHandler(async (req, res) => {
     // Throw an error if no post is found
     throw new ApiError(400, "Post not found");
   }
-  
+
   // Return a success response with the found post
   res.status(200).json({
     success: true,
@@ -83,21 +83,20 @@ const getPostById = asyncHandler(async (req, res) => {
   });
 });
 
-
 // get all post by comment:DONE
 const getPostsByComment = asyncHandler(async (req, res) => {
   // Get the user ID from the request user object
   const userId = req.user._id;
-  
+
   // Find posts where the commentAuthor matches the user ID
-  const posts = await postModel.find({'comments.commentAuthor': userId});
-  
+  const posts = await postModel.find({ "comments.commentAuthor": userId });
+
   // Check if no posts are found
   if (!posts) {
     // Throw an error if no posts are found
     throw new ApiError(404, "No post found");
   }
-  
+
   // Return a success response with the found posts
   res.status(200).json({
     success: true,
@@ -109,17 +108,19 @@ const getPostsByComment = asyncHandler(async (req, res) => {
 // get all post by tags: DONE
 const getPostsByTags = asyncHandler(async (req, res) => {
   // Get the tags from query parameters, split by comma, and trim spaces
-  const tags = req.query.tags ? req.query.tags.split(',').map(tag => tag.trim()) : [];
-  
+  const tags = req.query.tags
+    ? req.query.tags.split(",").map((tag) => tag.trim())
+    : [];
+
   // Check if tags are provided and not empty
   if (!tags || tags.length === 0) {
     // Throw an error if no tags are provided
     throw new ApiError(400, "Tags are required");
   }
-  
+
   // Find posts where the tags match any of the provided tags
   const posts = await postModel.find({ tags: { $in: tags } });
-  
+
   // Return a success response with the found posts
   res.status(200).json({
     success: true,
@@ -132,9 +133,9 @@ const getPostsByTags = asyncHandler(async (req, res) => {
 const getPostsByVote = asyncHandler(async (req, res) => {
   // Get the user ID from the request user object
   const userId = req.user._id;
-  
+
   // Find posts where the voteAuthor in comments matches the user ID
-  const posts = await postModel.find({ 'comments.votes.voteAuthor': userId });
+  const posts = await postModel.find({ "comments.votes.voteAuthor": userId });
 
   // Check if no posts are found or if the posts array is empty
   if (!posts || posts.length === 0) {
@@ -148,18 +149,16 @@ const getPostsByVote = asyncHandler(async (req, res) => {
     message: "Posts found",
     posts,
   });
-
 });
-
 
 // update post:DONE
 const updatePost = asyncHandler(async (req, res) => {
   // Retrieve data from body
   const { title, content, category, tags } = req.body;
-  
+
   // Find the post by ID
   const post = await postModel.findById(req.params.id);
-  
+
   // Check if the post is available or not
   if (!post) {
     // Throw an error if no post is found
@@ -174,7 +173,7 @@ const updatePost = asyncHandler(async (req, res) => {
 
   // Save the updated post to the database
   await post.save();
-  
+
   // Return a success response with the updated post
   res.status(200).json({
     success: true,
@@ -187,7 +186,7 @@ const updatePost = asyncHandler(async (req, res) => {
 const deletePost = asyncHandler(async (req, res) => {
   // Find the post by ID
   const post = await postModel.findById(req.params.id);
-  
+
   // Check if the post is available or not
   if (!post) {
     // Throw an error if no post is found
@@ -208,17 +207,17 @@ const deletePost = asyncHandler(async (req, res) => {
 const createComment = asyncHandler(async (req, res) => {
   // Retrieve the comment from the request body
   const { comment } = req.body;
-  
+
   // Find the post by ID
   const post = await postModel.findById(req.params.id);
-  
+
   // Check if the post is available
   if (post) {
     // Check if the user has already commented on the post
     const alreadyCommented = post.comments.find(
       (comment) => comment.commentAuthor.toString() === req.user._id.toString()
     );
-    
+
     // If the user has already commented, throw an error
     if (alreadyCommented) {
       throw new ApiError(400, "Already commented");
@@ -229,13 +228,13 @@ const createComment = asyncHandler(async (req, res) => {
       commentAuthor: req.user._id,
       comment,
     };
-    
+
     // Add the new comment to the post's comments array
     post.comments.push(newComment);
-    
+
     // Save the updated post to the database
     await post.save();
-    
+
     // Return a success response indicating the comment was created
     res.status(201).json({
       success: true,
@@ -251,33 +250,33 @@ const createComment = asyncHandler(async (req, res) => {
 const updateComment = asyncHandler(async (req, res) => {
   // Retrieve the updated comment from the request body
   const { comment } = req.body;
-  
+
   // Find the post by ID
   const post = await postModel.findById(req.params.id);
-  
+
   // Check if the post is available
   if (!post) {
     // Throw an error if the post is not found
     throw new ApiError(404, "Post not found");
   }
-  
+
   // Find the comment by the current user
   const existingComment = post.comments.find(
     (comment) => comment.commentAuthor.toString() === req.user._id.toString()
   );
-  
+
   // Check if the comment exists
   if (!existingComment) {
     // Throw an error if the comment is not found
     throw new ApiError(404, "Comment not found");
   }
-  
+
   // Update the comment with the new content
   existingComment.comment = comment;
-  
+
   // Save the updated post to the database
   await post.save();
-  
+
   // Return a success response indicating the comment was updated
   res.status(200).json({
     success: true,
@@ -289,7 +288,7 @@ const updateComment = asyncHandler(async (req, res) => {
 const deleteComment = asyncHandler(async (req, res) => {
   // Find the post by ID
   const post = await postModel.findById(req.params.id);
-  
+
   // Check if the post is available
   if (!post) {
     // Throw an error if the post is not found
@@ -309,7 +308,7 @@ const deleteComment = asyncHandler(async (req, res) => {
 
   // Remove the comment from the comments array
   post.comments.splice(commentIndex, 1);
-  
+
   // Save the updated post to the database
   await post.save();
 
@@ -325,20 +324,20 @@ const handleVote = asyncHandler(async (req, res) => {
   const { voteType } = req.body;
   const { postId, commentId } = req.params;
   const post = await postModel.findById(postId);
-  
+
   // Check for invalid vote type
   if (!["like", "dislike"].includes(voteType)) {
     throw new ApiError(400, "Invalid vote type");
   }
-   // Check for post available or not
+  // Check for post available or not
   if (!post) {
     throw new ApiError(400, "Post not found");
   }
-// Check for comments available or not
+  // Check for comments available or not
   if (post.comments.length <= 0) {
     throw new ApiError(400, "No comments found");
   }
-// Check for comment available or not
+  // Check for comment available or not
   const comment = post.comments.id(commentId);
   if (!comment) {
     throw new ApiError(404, "Comment not found");
@@ -377,7 +376,7 @@ const handleVote = asyncHandler(async (req, res) => {
       voteType,
     });
     await post.save();
-     res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Vote registered",
     });
