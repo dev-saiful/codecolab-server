@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { postModel } from "../models/index.js";
+import { commentModel, postModel } from "../models/index.js";
 import validator from "validator";
 import { ApiError } from "../utils/apiError.js";
 
@@ -230,11 +230,12 @@ const createComment = asyncHandler(async (req, res) => {
     };
 
     // Add the new comment to the post's comments array
-    post.comments.push(newComment);
+    // post.comments.push(newComment);
 
-    // Save the updated post to the database
-    await post.save();
-
+    // // Save the updated post to the database
+    // await post.save();
+    await commentModel.create(newComment);
+ post.comments.push(newComment);
     // Return a success response indicating the comment was created
     res.status(201).json({
       success: true,
