@@ -235,7 +235,8 @@ const createComment = asyncHandler(async (req, res) => {
     // // Save the updated post to the database
     // await post.save();
     await commentModel.create(newComment);
- post.comments.push(newComment);
+ post.comments.push(newComment.commentAuthor);
+ await post.save();
     // Return a success response indicating the comment was created
     res.status(201).json({
       success: true,
