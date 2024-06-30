@@ -18,11 +18,16 @@ import {
   getPostsByTags,
   updatePost,
   deletePost,
+  getPostsByUserId,
+} from "./post.controller.js";
+
+import {
   createComment,
   updateComment,
   deleteComment,
-  handleVote,
-} from "./post.controller.js";
+} from "./comment.controller.js";
+
+import {  handleVote,} from "./vote.controller.js";
 
 import {
   resetPasswordToken,
@@ -44,6 +49,7 @@ export {
   getPostsByVote,
   getPostsByComment,
   getPostsByTags,
+  getPostsByUserId,
   updatePost,
   deletePost,
   createComment,

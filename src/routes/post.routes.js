@@ -13,6 +13,7 @@ import {
   getPostsByComment,
   getPostsByVote,
   handleVote,
+  getPostsByUserId,
 } from "../controllers/index.js";
 
 const postRoute = Router();
@@ -23,26 +24,15 @@ const postRoute = Router();
  * @route http://localhost:{PORT}/api/v1/post
  * @access private
  */
-postRoute.get("/", auth, isUser, getPosts);
-postRoute.get("/", auth, isAdmin, getPosts);
+postRoute.get("/",getPosts);
 
 /**
- * @desc Get post by Id
+ * @desc Get all posts
  * @method GET
- * @route http://localhost:{PORT}/api/v1/post/:id
+ * @route http://localhost:{PORT}/api/v1/post
  * @access private
  */
-postRoute.get("/:id", auth, isUser, getPostById);
-postRoute.get("/:id", auth, isAdmin, getPostById);
-
-/**
- * @desc Get posts by tags
- * @method GET
- * @route http://localhost:{PORT}/api/v1/post/tags-post
- * @access private
- */
-postRoute.get("/tags-post", auth, isUser, getPostsByTags);
-postRoute.get("/tags-post", auth, isAdmin, getPostsByTags);
+postRoute.get("/user-post",auth,isUser,getPostsByUserId);
 
 /**
  * @desc Get posts by commented
@@ -52,6 +42,15 @@ postRoute.get("/tags-post", auth, isAdmin, getPostsByTags);
  */
 postRoute.get("/commented-post", auth, isUser, getPostsByComment);
 postRoute.get("/commented-post", auth, isAdmin, getPostsByComment);
+
+/**
+ * @desc Get posts by tags
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/post/tags-post
+ * @access private
+ */
+postRoute.get("/tags-post",  getPostsByTags);
+
 
 /**
  * @desc Get posts by voted
@@ -69,6 +68,16 @@ postRoute.get("/voted-post", auth, isAdmin, getPostsByVote);
  * @access private
  */
 postRoute.post("/create-post", auth, isUser, createPost);
+
+
+/**
+ * @desc Get post by Id
+ * @method GET
+ * @route http://localhost:{PORT}/api/v1/post/:id
+ * @access private
+ */
+postRoute.get("/:id",  getPostById);
+
 
 /**
  * @desc Update a post
